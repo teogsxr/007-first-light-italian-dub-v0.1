@@ -6,10 +6,10 @@ Versione `0.1` del doppiaggio italiano source-first per 007 First Light.
 
 ## Stato
 
-- Audio patchati: `4505/16255` = `27.71%`.
-- Mancanti: `11750`.
+- Audio patchati: `4859/16255` = `29.89%`.
+- Mancanti: `11396`.
 - Bond: `393/715`.
-- Asset generati inclusi: `4505` WEM, `69.75 MB`.
+- Asset generati inclusi: `4859` WEM, `74.48 MB`.
 
 La tabella completa per personaggio e in [`docs/progress_by_character.md`](docs/progress_by_character.md).
 

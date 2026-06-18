@@ -1,5 +1,6 @@
-# v0.1
+# Release notes v0.1
 
-- Copertura: 4505/16255 (27.71%).
-- Asset generati: 4505 WEM.
-- Metodo: target voice approvate + performance source-first, non one-shot clone diretto.
+- Copertura: 4859/16255 (29.89%).
+- Asset generati: 4859 WEM.
+- Metodo source-first con voci target approvate, QA ASR/timing/semantic/runtime/subtitle.
+- Non include file originali del gioco.
