@@ -1,5 +1,7 @@
 # 007 First Light - Doppiaggio Italiano AI Source-First v0.1
 
+![Source-first dubbing pipeline](docs/assets/source-first-dubbing-hero.png)
+
 Versione `0.1` del doppiaggio italiano source-first per 007 First Light.
 
 ## Stato
@@ -9,7 +11,7 @@ Versione `0.1` del doppiaggio italiano source-first per 007 First Light.
 - Bond: `393/715`.
 - Asset generati inclusi: `4505` WEM, `69.75 MB`.
 
-La tabella completa per personaggio ? in [`docs/progress_by_character.md`](docs/progress_by_character.md).
+La tabella completa per personaggio e in [`docs/progress_by_character.md`](docs/progress_by_character.md).
 
 ## Installazione
 
@@ -35,19 +37,27 @@ Ripristina l'ultimo backup creato dall'installer.
 
 ## Metodo reale
 
-Questa mod non usa one-shot clone diretto di ogni battuta originale. La pipeline usa voce target approvata per il personaggio e audio sorgente come autorit? di recitazione: emozione, pause, respiro, tosse, urla, distanza, urgenza e timing. Poi applica generazione source-first in italiano e QA con ASR, conformance performance/timing, filtro semantico, mastering 48 kHz, Wwise Vorbis, marker preservation, runtime safety e audit sottotitoli.
+Questa mod non usa one-shot clone diretto di ogni battuta originale. La pipeline usa una voce target approvata per il personaggio e l'audio sorgente come autorita di recitazione: emozione, pause, respiro, tosse, urla, distanza, urgenza e timing.
 
-Perch? a volte resta un lieve accento inglese: nei test, il polish dell'accento rovinava recitazione o timing. In v0.1 preferiamo preservare pathos e ritmo del source rispetto a forzare una dizione perfetta ma piatta.
+Il testo italiano viene adattato quando serve per stare nel tempo disponibile. Ogni take promosso passa attraverso QA ASR, controllo parole richieste, controllo timing/performance, filtro semantico, mastering 48 kHz, Wwise Vorbis, preservazione marker, runtime safety e audit sottotitoli.
 
-Questa ? una prima passata automatica pensata anche come pipeline riusabile per altri giochi: priorit? a velocit?, sicurezza e coerenza, poi raffinamento.
+Perche a volte resta un lieve accento inglese: nei test, il polish dell'accento rovinava recitazione o timing. In v0.1 preferiamo preservare pathos e ritmo del source rispetto a forzare una dizione perfetta ma piatta.
+
+Questa e una prima passata automatica pensata anche come pipeline riusabile per altri giochi: priorita a velocita, sicurezza e coerenza, poi raffinamento.
 
 ## Limiti noti
 
-- Non ? una localizzazione finale AAA rifinita a mano.
+- Non e una localizzazione finale AAA rifinita a mano.
 - Alcune voci possono avere lieve accento o enfasi non perfetta.
 - Le righe non patchate restano in backlog per retake/repair.
 - Non include file originali del gioco.
 
 ## QA locale
 
-? stata creata anche una pagina locale di confronto `originale -> voce target senza patos -> source-first con patos`, ma non viene inclusa qui perch? contiene audio sorgente originale del gioco. Nel progetto locale: `C:\Users\matte\Documents\Codex\2026-06-12\saresti-in-grado-di-creare-una\outputs\NoPathosVsSourceFirst_20260618_0852\index.html`.
+E stata creata anche una pagina locale di confronto `originale -> voce target senza patos -> source-first con patos`, ma non viene inclusa qui perche contiene audio sorgente originale del gioco.
+
+Percorso locale:
+
+```text
+C:\Users\matte\Documents\Codex\2026-06-12\saresti-in-grado-di-creare-una\outputs\NoPathosVsSourceFirst_20260618_0852\index.html
+```
