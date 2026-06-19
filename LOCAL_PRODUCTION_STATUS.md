@@ -1,30 +1,42 @@
-# Local Production Status
+# 007 First Light - Official Speaker Progress
 
-Last local production update: 2026-06-19 10:56 Europe/Rome.
+Generated: 2026-06-19 10:55:31 +0200
 
-This file records the current local working status only. It does not mean the
-published v0.1 ZIP/release package has been rebuilt or uploaded.
+- Total official audio: `16255`
+- Patched audio: `5925`
+- Remaining audio: `10330`
+- Completion: `36.45%`
+- Cumulative runtime-approved rows: `5925`
 
-## Current Local Runtime Patch
+## Public Release v0.2
 
-- Local cumulative runtime-approved audio: `5925/16255` = `36.45%`.
-- Remaining official audio: `10330`.
-- Latest verified local production cycle:
-  `campaign_MERCUKM01_WAVFIRST_PREDEDUPE_20260619_1045`.
-- Latest runtime apply: `3` safe WEM rows to `chunk0.rpkg`.
-- Previous local cycle: `campaign_MONEYPENNY_WAVFIRST_PREDEDUPE_20260619_1032`,
-  `6` safe WEM rows across `chunk0.rpkg` and `chunk1.rpkg`.
+- Published package target: `007-first-light-italian-dub-v0.2.zip`.
+- Generated WEM assets included: `5925`.
+- Manifest bytes: `99764217`.
+- Zip size: about `97.59 MiB`.
+- Release method: rebuild from cumulative runtime-approved rows, resolving only generated WEM candidates and excluding original game audio.
 
-## Important Production Notes
+## Largest Remaining Speakers
 
-- Do not rerun `MERCUKM01_WAVFIRST_PREDEDUPE_20260619_1045` unchanged; timing
-  killed the yield.
-- Do not rerun `MONEYPENNY_WAVFIRST_PREDEDUPE_20260619_1032` unchanged; ASR,
-  pathos and capacity reduced the usable output.
-- Continue with prededuped guarded queues only: no hash already present in
-  `sourcefirst_runtime_applied_promoted_cumulative.csv` may be rendered unless
-  the campaign is an explicit quality retake.
-- Next quality-preserving work should use targeted Profile B/C repairs for
-  Moneypenny/MERCUKM01, or switch to another approved large residual speaker
-  with the same prededuped WAV-first gates.
-
+| Speaker | ID | Total | Patched | Remaining | % |
+|---|---:|---:|---:|---:|---:|
+| Mercenary | `MERCMRM02` | 316 | 0 | 316 | 0% |
+| Bond | `BOND` | 715 | 418 | 297 | 58.46% |
+| Mercenary | `MERCUKM02` | 409 | 178 | 231 | 43.52% |
+| Security | `SECUKM02` | 403 | 175 | 228 | 43.42% |
+| Security | `SECUKM01` | 402 | 193 | 209 | 48.01% |
+| Mercenary | `MERCUKM01` | 342 | 135 | 207 | 39.47% |
+| Mercenary | `MERCUKM03` | 348 | 142 | 206 | 40.8% |
+| MI6 Handler | `MONEYPENNY` | 335 | 134 | 201 | 40% |
+| Security | `SECUKM05` | 342 | 152 | 190 | 44.44% |
+| Security | `SECUKM04` | 343 | 154 | 189 | 44.9% |
+| Security | `SECUKM03` | 343 | 155 | 188 | 45.19% |
+| Mercenary | `MERCUKM04` | 342 | 156 | 186 | 45.61% |
+| Security | `SECEEM01` | 332 | 150 | 182 | 45.18% |
+| Mercenary | `MERCUKM05` | 346 | 168 | 178 | 48.55% |
+| Security | `SECEEM04` | 275 | 99 | 176 | 36% |
+| Civilian | `CIVVTF01` | 244 | 68 | 176 | 27.87% |
+| Mercenary | `MERCUKM06` | 342 | 167 | 175 | 48.83% |
+| Security | `SECUKM06` | 342 | 169 | 173 | 49.42% |
+| Greenway | `GREENWAY` | 328 | 155 | 173 | 47.26% |
+| Security | `SECEEM02` | 274 | 102 | 172 | 37.23% |

@@ -1,19 +1,28 @@
-# 007 First Light - Doppiaggio Italiano AI Source-First v0.1
+# 007 First Light - Doppiaggio Italiano AI Source-First v0.2
 
 ![Source-first dubbing pipeline](docs/assets/source-first-dubbing-hero.png)
 
-Versione `0.1` del doppiaggio italiano source-first per 007 First Light.
+Versione `0.2` del doppiaggio italiano source-first per 007 First Light.
 
 [Pagina metodo e casting voci](https://teogsxr.github.io/007-first-light-italian-dub-v0.1/): ascolto pubblico con soli audio generati, confronto voce target senza patos vs source-first con patos.
 
-## Stato
+## Stato v0.2
 
-- Audio patchati: `4859/16255` = `29.89%`.
-- Mancanti: `11396`.
-- Bond: `393/715`.
-- Asset generati inclusi: `4859` WEM, `74.48 MB`.
+- Audio patchati: `5925/16255` = `36.45%`.
+- Mancanti: `10330`.
+- Bond: `418/715`.
+- Asset generati inclusi: `5925` WEM, `95.14 MiB`.
+- Pacchetto zip v0.2: circa `97.59 MiB`.
 
 La tabella completa per personaggio e in [`docs/progress_by_character.md`](docs/progress_by_character.md).
+
+## Cosa cambia in v0.2
+
+- Aumentata la copertura pubblicata da `4859` a `5925` audio runtime-approved.
+- Aggiornati manifest, progressi per personaggio, pacchetto installabile e pagina Pages.
+- Integrata la pipeline guarded/prededuped: nessun hash gia applicato viene rigenerato o ripatchato per errore.
+- Aggiunta ricostruzione release da cumulativo con audit dei WEM risolti dalle cache generate, senza includere audio originale del gioco.
+- Consolidati i controlli di QA: ASR, parole richieste, timing, conformance, pathos source-first, marker preservation, subtitle audit e capacity/runtime gate.
 
 ## Installazione
 
@@ -43,15 +52,16 @@ Questa mod non usa one-shot clone diretto di ogni battuta originale. La pipeline
 
 Il testo italiano viene adattato quando serve per stare nel tempo disponibile. Ogni take promosso passa attraverso QA ASR, controllo parole richieste, controllo timing/performance, filtro semantico, mastering 48 kHz, Wwise Vorbis, preservazione marker, runtime safety e audit sottotitoli.
 
-Perche a volte resta un lieve accento inglese: nei test, il polish dell'accento rovinava recitazione o timing. In v0.1 preferiamo preservare pathos e ritmo del source rispetto a forzare una dizione perfetta ma piatta.
+Perche a volte resta un lieve accento inglese: nei test, il polish dell'accento rovinava recitazione o timing. In v0.2 preferiamo preservare pathos e ritmo del source rispetto a forzare una dizione perfetta ma piatta.
 
 Questa e una prima passata automatica pensata anche come pipeline riusabile per altri giochi: priorita a velocita, sicurezza e coerenza, poi raffinamento.
 
-## Limiti noti
+## Stato qualitativo
 
-- Non e una localizzazione finale AAA rifinita a mano.
-- Alcune voci possono avere lieve accento o enfasi non perfetta.
-- Le righe non patchate restano in backlog per retake/repair.
+- Le battute pubblicate sono state promosse dalla pipeline automatica e applicate al runtime locale.
+- Non tutte le voci/personaggi sono completi: il progetto e ancora in avanzamento.
+- Le righe non patchate restano in backlog per retake, Profile B/C repair o approvazione voce.
+- Alcuni take possono mantenere lieve accento o enfasi non perfetta se correggerli danneggia pathos/timing.
 - Non include file originali del gioco.
 
 ## Supporto al progetto
