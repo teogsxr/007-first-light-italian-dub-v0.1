@@ -124,7 +124,7 @@ def ensure_game_not_running() -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Apply generated Italian WEM files to 007 First Light RPKG chunks.")
-    parser.add_argument("--game-path", default=r"C:\Program Files (x86)\Steam\steamapps\common\007 First Light")
+    parser.add_argument("--game-path", required=True, help="Game root folder containing Runtime/chunk0.rpkg and Runtime/chunk1.rpkg.")
     parser.add_argument("--manifest", default="mod_manifest/runtime_wem_manifest.csv")
     parser.add_argument("--label", default="007_it_dub_v0_1")
     parser.add_argument("--backup-root", default="backups")
@@ -139,7 +139,8 @@ def main() -> int:
     if not rows:
         raise SystemExit("No rows in manifest")
 
-    ensure_game_not_running()
+    if args.apply:
+        ensure_game_not_running()
     runtime = Path(args.game_path) / "Runtime"
     chunk_paths = {"chunk0": runtime / "chunk0.rpkg", "chunk1": runtime / "chunk1.rpkg"}
     for chunk_path in chunk_paths.values():
@@ -147,7 +148,8 @@ def main() -> int:
             raise SystemExit(f"Missing runtime chunk: {chunk_path}")
 
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_dir = root / args.backup_root / f"{stamp}_{args.label}"
+    output_root = root / args.backup_root if args.apply else root / "dryrun_reports"
+    backup_dir = output_root / f"{stamp}_{args.label}"
     backup_dir.mkdir(parents=True, exist_ok=True)
 
     planned: list[dict[str, object]] = []
@@ -164,8 +166,9 @@ def main() -> int:
             errors.append({"chunk": chunk, "reason": "unknown_chunk"})
             continue
         entries = parse_rpkg_entries(chunk_path)
-        (backup_dir / chunk / "original_segments").mkdir(parents=True, exist_ok=True)
-        (backup_dir / chunk / "new_segments").mkdir(parents=True, exist_ok=True)
+        if args.apply:
+            (backup_dir / chunk / "original_segments").mkdir(parents=True, exist_ok=True)
+            (backup_dir / chunk / "new_segments").mkdir(parents=True, exist_ok=True)
 
         for row in chunk_rows:
             hash_text = (row.get("source_hash") or "").upper()
@@ -192,8 +195,11 @@ def main() -> int:
 
             original_rel = Path(chunk) / "original_segments" / f"{entry.index}_{hash_text}.WWES.stored"
             new_rel = Path(chunk) / "new_segments" / f"{entry.index}_{hash_text}.WWES.new"
-            (backup_dir / original_rel).write_bytes(original_stored)
-            (backup_dir / new_rel).write_bytes(new_data)
+            original_rel_text = str(original_rel).replace("\\", "/") if args.apply else ""
+            new_rel_text = str(new_rel).replace("\\", "/") if args.apply else ""
+            if args.apply:
+                (backup_dir / original_rel).write_bytes(original_stored)
+                (backup_dir / new_rel).write_bytes(new_data)
             planned.append(
                 {
                     "hash": hash_text,
@@ -208,8 +214,8 @@ def main() -> int:
                     "original_size_final": entry.size_final,
                     "new_size_final": len(new_data),
                     "pad_bytes": entry.size_final - len(new_data),
-                    "original_relative_path": str(original_rel).replace("\\", "/"),
-                    "new_relative_path": str(new_rel).replace("\\", "/"),
+                    "original_relative_path": original_rel_text,
+                    "new_relative_path": new_rel_text,
                     "original_sha1": sha1_bytes(apply_xor(original_stored)),
                     "new_sha1": sha1_bytes(new_data),
                     "target_it": row.get("target_it", ""),
@@ -247,12 +253,24 @@ def main() -> int:
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "game_path": str(Path(args.game_path)),
         "input_manifest": str(manifest_path),
-        "backup_dir": str(backup_dir),
+        "backup_dir": str(backup_dir) if args.apply else "",
+        "output_dir": str(backup_dir),
         "file_count": len(planned),
         "files": planned,
     }
     (backup_dir / "patch_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({"status": manifest["mode"], "file_count": len(planned), "backup_dir": str(backup_dir)}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "status": manifest["mode"],
+                "file_count": len(planned),
+                "backup_dir": manifest["backup_dir"],
+                "output_dir": manifest["output_dir"],
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
 
 

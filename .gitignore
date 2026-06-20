@@ -1,4 +1,6 @@
 backups/
+dryrun_reports/
+game_path.txt
 *.log
 __pycache__/
 .DS_Store

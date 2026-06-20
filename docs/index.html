@@ -132,14 +132,14 @@
   <header>
     <h1>Metodo source-first e casting voci</h1>
     <p>
-      Questa pagina mostra come e stata costruita la v0.2 del doppiaggio italiano:
+      Questa pagina mostra come e stata costruita la v0.3 del doppiaggio italiano:
       una voce target approvata per il personaggio, poi una generazione source-first
       che eredita ritmo, intensita, pause e patos dalla battuta originale.
     </p>
     <div class="meta">
-      <span class="pill">v0.2</span>
-      <span class="pill">5925 audio patchati</span>
-      <span class="pill">36.45% del dialogo mappato</span>
+      <span class="pill">v0.3</span>
+      <span class="pill">8182 audio patchati</span>
+      <span class="pill">50.34% del dialogo mappato</span>
       <span class="pill">non one-shot clone</span>
     </div>
   </header>
@@ -150,30 +150,31 @@
       I player qui sotto contengono solo audio generati per la mod.
     </div>
 
-    <h2>Stato v0.2</h2>
+    <h2>Stato v0.3</h2>
     <p>
-      La release pubblicata contiene 5925 WEM generati e runtime-approved su 16255
-      audio ufficiali mappati. La v0.2 aggiorna il pacchetto installabile, il
-      manifest, la tabella personaggi e il metodo guarded/prededuped: la pipeline
-      evita di rigenerare o ripatchare hash gia applicati e usa solo WEM generati,
-      mai audio originale del gioco.
+      La release pubblicata contiene 8182 WEM generati e runtime-approved su 16255
+      audio ufficiali mappati. La v0.3 introduce una copertura giocabile piu
+      rapida: le righe gold strict restano source-first complete, mentre le righe
+      playable provisional mantengono gate duri su timing, ASR, semantica,
+      sottotitoli, capacity e runtime, ma segnano pathos/conformance come debito
+      di rifinitura.
     </p>
 
     <table>
       <thead>
         <tr>
           <th>Voce</th>
-          <th>Valore v0.2</th>
+          <th>Valore v0.3</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Copertura</td>
-          <td>5925/16255, pari al 36.45%</td>
+          <td>8182/16255, pari al 50.34%</td>
         </tr>
         <tr>
           <td>Bond</td>
-          <td>418/715 audio patchati</td>
+          <td>439/715 audio patchati</td>
         </tr>
         <tr>
           <td>Metodo</td>
@@ -181,7 +182,7 @@
         </tr>
         <tr>
           <td>Limite dichiarato</td>
-          <td>Prima passata automatica: pathos e timing prima del polish aggressivo dell'accento.</td>
+          <td>Prima passata automatica: copertura giocabile ora, rifinitura recitativa dopo.</td>
         </tr>
       </tbody>
     </table>
@@ -273,6 +274,16 @@
         </tr>
       </tbody>
     </table>
+
+    <h2>Installazione</h2>
+    <p>
+      L'installer non dipende da Steam: funziona con qualunque installazione se
+      viene indicata la cartella del gioco che contiene Runtime/chunk0.rpkg e
+      Runtime/chunk1.rpkg. Se non trova il gioco, chiede se usi Steam; in caso
+      contrario ti fa inserire il percorso del tuo store o launcher. E possibile
+      anche usare il parametro <code>-GamePath</code>, un file locale
+      <code>game_path.txt</code>, o le variabili ambiente documentate nel README.
+    </p>
 
     <div class="support">
       <h2>Supporto al progetto</h2>

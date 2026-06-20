@@ -1,8 +1,8 @@
 {
-  "version": "0.2",
-  "rows": 5925,
-  "total_bytes": 99764217,
+  "version": "0.3",
+  "rows": 8182,
+  "total_bytes": 139770134,
   "manifest": "mod_manifest/runtime_wem_manifest.csv",
-  "built_at": "2026-06-19T11:13:48",
+  "built_at": "2026-06-20T18:38:07",
   "source_cumulative_csv": "sourcefirst_runtime_applied_promoted_cumulative.csv"
 }

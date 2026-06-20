@@ -1,42 +1,34 @@
 # 007 First Light - Official Speaker Progress
 
-Generated: 2026-06-19 10:55:31 +0200
+Generated: 2026-06-20 18:16:12 +0200
 
 - Total official audio: `16255`
-- Patched audio: `5925`
-- Remaining audio: `10330`
-- Completion: `36.45%`
-- Cumulative runtime-approved rows: `5925`
-
-## Public Release v0.2
-
-- Published package target: `007-first-light-italian-dub-v0.2.zip`.
-- Generated WEM assets included: `5925`.
-- Manifest bytes: `99764217`.
-- Zip size: about `97.59 MiB`.
-- Release method: rebuild from cumulative runtime-approved rows, resolving only generated WEM candidates and excluding original game audio.
+- Patched audio: `8182`
+- Remaining audio: `8073`
+- Completion: `50.34%`
+- Cumulative runtime-approved rows: `8182`
 
 ## Largest Remaining Speakers
 
 | Speaker | ID | Total | Patched | Remaining | % |
 |---|---:|---:|---:|---:|---:|
 | Mercenary | `MERCMRM02` | 316 | 0 | 316 | 0% |
-| Bond | `BOND` | 715 | 418 | 297 | 58.46% |
-| Mercenary | `MERCUKM02` | 409 | 178 | 231 | 43.52% |
-| Security | `SECUKM02` | 403 | 175 | 228 | 43.42% |
-| Security | `SECUKM01` | 402 | 193 | 209 | 48.01% |
-| Mercenary | `MERCUKM01` | 342 | 135 | 207 | 39.47% |
-| Mercenary | `MERCUKM03` | 348 | 142 | 206 | 40.8% |
-| MI6 Handler | `MONEYPENNY` | 335 | 134 | 201 | 40% |
-| Security | `SECUKM05` | 342 | 152 | 190 | 44.44% |
-| Security | `SECUKM04` | 343 | 154 | 189 | 44.9% |
-| Security | `SECUKM03` | 343 | 155 | 188 | 45.19% |
-| Mercenary | `MERCUKM04` | 342 | 156 | 186 | 45.61% |
-| Security | `SECEEM01` | 332 | 150 | 182 | 45.18% |
-| Mercenary | `MERCUKM05` | 346 | 168 | 178 | 48.55% |
-| Security | `SECEEM04` | 275 | 99 | 176 | 36% |
-| Civilian | `CIVVTF01` | 244 | 68 | 176 | 27.87% |
-| Mercenary | `MERCUKM06` | 342 | 167 | 175 | 48.83% |
-| Security | `SECUKM06` | 342 | 169 | 173 | 49.42% |
-| Greenway | `GREENWAY` | 328 | 155 | 173 | 47.26% |
-| Security | `SECEEM02` | 274 | 102 | 172 | 37.23% |
+| Bond | `BOND` | 715 | 439 | 276 | 61.4% |
+| Mercenary | `MERCUKM02` | 409 | 186 | 223 | 45.48% |
+| Mercenary | `MERCUKM01` | 342 | 138 | 204 | 40.35% |
+| Civilian | `CIVVTF01` | 244 | 71 | 173 | 29.1% |
+| Civilian | `CIVMRM01` | 171 | 0 | 171 | 0% |
+| Civilian | `CIVEEF01` | 160 | 0 | 160 | 0% |
+| Civilian | `CIVUKF10` | 160 | 0 | 160 | 0% |
+| Civilian | `CIVEEM03` | 156 | 0 | 156 | 0% |
+| Civilian | `CIVEEM04` | 156 | 0 | 156 | 0% |
+| Mercenary | `MERCMRM03` | 313 | 165 | 148 | 52.72% |
+| Civilian | `CIVMRF03` | 189 | 41 | 148 | 21.69% |
+| Mercenary | `MERCMRM04` | 332 | 185 | 147 | 55.72% |
+| MI6 Handler | `MONEYPENNY` | 335 | 189 | 146 | 56.42% |
+| Civilian | `CIVMRM05` | 166 | 27 | 139 | 16.27% |
+| Civilian | `CIVEEF04` | 139 | 0 | 139 | 0% |
+| Security | `SECUKM01` | 402 | 272 | 130 | 67.66% |
+| Security | `SECUKM02` | 403 | 274 | 129 | 67.99% |
+| Civilian | `CIVMRM02` | 129 | 0 | 129 | 0% |
+| Greenway | `GREENWAY` | 328 | 202 | 126 | 61.59% |

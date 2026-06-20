@@ -8,13 +8,14 @@ import os
 import re
 import shutil
 import subprocess
+import struct
 import zipfile
 import argparse
 from datetime import datetime
 from pathlib import Path
 
 
-VERSION = "0.2"
+VERSION = "0.3"
 TOTAL_OFFICIAL_AUDIO = 16255
 DEFAULT_PROJECT_ROOT_ENV = "DUBBING_007_PROJECT_ROOT"
 
@@ -76,6 +77,47 @@ def chunk_name(row: dict[str, str]) -> str:
         if match:
             return match.group(1).lower()
     raise RuntimeError(f"Cannot infer chunk for {source_hash(row)}")
+
+
+def parse_runtime_capacities(chunk_path: Path) -> dict[str, int]:
+    capacities: dict[str, int] = {}
+    with chunk_path.open("rb") as f:
+        if f.read(4) != b"2KPR":
+            raise SystemExit(f"Unexpected RPKG magic: {chunk_path}")
+        f.read(9)
+        hash_count, hash_header_table_size, _ = struct.unpack("<III", f.read(12))
+        hash_table_offset = 25
+        resource_table_offset = hash_table_offset + hash_header_table_size
+
+        headers: list[tuple[int, int]] = []
+        f.seek(hash_table_offset)
+        for _index in range(hash_count):
+            hash_value, _data_offset, _data_size_raw = struct.unpack("<QQI", f.read(20))
+            headers.append((hash_value, _data_size_raw))
+
+        f.seek(resource_table_offset)
+        for hash_value, _data_size_raw in headers:
+            raw = f.read(20)
+            if len(raw) != 20:
+                raise SystemExit(f"Short resource record in {chunk_path.name}")
+            typ = raw[:4][::-1].decode("ascii", errors="replace")
+            reference_table_size, size_final, _mem, _vmem = struct.unpack("<IIII", raw[4:20])
+            if typ == "WWES":
+                capacities[f"{hash_value:016X}"] = size_final
+            if reference_table_size:
+                f.seek(reference_table_size, 1)
+    return capacities
+
+
+def load_runtime_capacities(game_path: str) -> dict[str, dict[str, int]]:
+    if not game_path:
+        return {}
+    runtime = Path(game_path) / "Runtime"
+    chunk_paths = {"chunk0": runtime / "chunk0.rpkg", "chunk1": runtime / "chunk1.rpkg"}
+    missing = [str(path) for path in chunk_paths.values() if not path.exists()]
+    if missing:
+        raise SystemExit(f"Cannot use --game-path for capacity check; missing: {', '.join(missing)}")
+    return {chunk: parse_runtime_capacities(path) for chunk, path in chunk_paths.items()}
 
 
 def is_generated_wem(path_text: str) -> bool:
@@ -149,6 +191,14 @@ def rank_candidate(path: Path, row: dict[str, str]) -> int:
     return score
 
 
+def candidate_sort_key(path: Path, row: dict[str, str]) -> tuple[int, str]:
+    return (-rank_candidate(path, row), str(path).lower())
+
+
+def fits_capacity(path: Path, capacity: int | None) -> bool:
+    return capacity is None or path.stat().st_size <= capacity
+
+
 def build_wem_index(root: Path, needed_hashes: set[str]) -> dict[str, list[Path]]:
     try:
         result = subprocess.run(
@@ -214,7 +264,7 @@ def write_progress_docs(repo: Path, progress_rows: list[dict[str, str]]) -> None
     write_csv(docs / "progress_by_character.csv", progress_rows, list(progress_rows[0].keys()))
     summary = progress_summary(progress_rows)
     lines = [
-        "# Progress by character - v0.2",
+        f"# Progress by character - v{VERSION}",
         "",
         f"- Total official audio: `{summary['total']}`",
         f"- Patched audio: `{summary['patched']}`",
@@ -280,6 +330,11 @@ def main() -> int:
         default=os.environ.get(DEFAULT_PROJECT_ROOT_ENV, ""),
         help=f"Local 007 dubbing project root. Can also be set with ${DEFAULT_PROJECT_ROOT_ENV}.",
     )
+    parser.add_argument(
+        "--game-path",
+        default="",
+        help="Optional installed game root used to select WEM candidates that fit the current Runtime chunks.",
+    )
     args = parser.parse_args()
 
     if not args.project_root:
@@ -287,10 +342,15 @@ def main() -> int:
 
     repo = Path(__file__).resolve().parents[1]
     project_root = Path(args.project_root)
+    runtime_capacities = load_runtime_capacities(args.game_path)
     production_root = project_root / "production" / "global_patch_with_approved_voices"
     cumulative_csv = production_root / "sourcefirst_runtime_applied_promoted_cumulative.csv"
-    progress_csv = production_root / "007_full_official_speaker_progress_latest.csv"
-    progress_md = production_root / "007_full_official_speaker_progress_latest.md"
+    progress_csv = production_root / "official_progress" / "007_full_official_speaker_progress_latest.csv"
+    progress_md = production_root / "official_progress" / "007_full_official_speaker_progress_latest.md"
+    if not progress_csv.exists():
+        progress_csv = production_root / "007_full_official_speaker_progress_latest.csv"
+    if not progress_md.exists():
+        progress_md = production_root / "007_full_official_speaker_progress_latest.md"
 
     rows = read_csv(cumulative_csv)
     progress_rows = read_csv(progress_csv)
@@ -308,27 +368,39 @@ def main() -> int:
 
     resolved: dict[str, Path] = {}
     missing: list[str] = []
+    oversize: list[str] = []
     resolver_audit: list[dict[str, str]] = []
     for h, row in unique_rows.items():
+        chunk = chunk_name(row)
+        capacity = runtime_capacities.get(chunk, {}).get(h) if runtime_capacities else None
         direct = Path(row.get("wem_path") or "")
-        chosen: Path | None = direct if row.get("wem_path") and direct.exists() and is_generated_wem(str(direct)) else None
+        chosen: Path | None = (
+            direct
+            if row.get("wem_path") and direct.exists() and is_generated_wem(str(direct)) and fits_capacity(direct, capacity)
+            else None
+        )
         source = "cumulative_wem_path" if chosen else ""
         if chosen is None:
-            candidates = [p for p in wem_index.get(h, []) if p.exists()]
+            candidates = [p for p in wem_index.get(h, []) if p.exists() and fits_capacity(p, capacity)]
             if candidates:
-                chosen = sorted(candidates, key=lambda p: rank_candidate(p, row), reverse=True)[0]
+                chosen = sorted(candidates, key=lambda p: candidate_sort_key(p, row))[0]
                 source = "resolved_generated_candidate"
         if chosen is None:
-            missing.append(h)
+            if capacity is None:
+                missing.append(h)
+            else:
+                oversize.append(f"{h}@{chunk}<={capacity}")
             continue
         resolved[h] = chosen
         resolver_audit.append(
             {
                 "source_hash": h,
-                "chunk": chunk_name(row),
+                "chunk": chunk,
                 "resolver_source": source,
                 "generated_path_hint": public_path_hint(chosen, project_root),
                 "score": str(rank_candidate(chosen, row)),
+                "wem_size_bytes": str(chosen.stat().st_size),
+                "runtime_capacity_bytes": "" if capacity is None else str(capacity),
                 "official_speaker_id": row.get("official_speaker_id", ""),
                 "official_speaker_name": row.get("official_speaker_name", ""),
             }
@@ -336,6 +408,8 @@ def main() -> int:
 
     if missing:
         raise SystemExit(f"Missing generated WEM files for {len(missing)} hashes: {', '.join(missing[:20])}")
+    if oversize:
+        raise SystemExit(f"No generated WEM fits current runtime capacity for {len(oversize)} hashes: {', '.join(oversize[:20])}")
 
     mod_wem = repo / "mod" / "wem"
     safe_remove_tree(mod_wem, repo)
@@ -401,7 +475,7 @@ def main() -> int:
         + "\n",
         encoding="utf-8",
     )
-    write_csv(repo / "mod_manifest" / "wem_resolver_audit_v0.2.csv", resolver_audit, list(resolver_audit[0].keys()))
+    write_csv(repo / "mod_manifest" / f"wem_resolver_audit_v{VERSION}.csv", resolver_audit, list(resolver_audit[0].keys()))
     write_progress_docs(repo, progress_rows)
 
     if progress_md.exists():
