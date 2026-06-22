@@ -16,7 +16,7 @@ Versione `0.4` del doppiaggio italiano source-first per 007 First Light.
 - Greenway: `243/328` = `74.09%`.
 - Moneypenny: `231/335` = `68.96%`.
 - Asset generati inclusi: `10569` WEM, `182.39 MiB`.
-- Pacchetto zip v0.4: circa `191.46 MiB`.
+- Pacchetto zip v0.4: circa `207.99 MiB`.
 - Installer aggiornato con supporto append-relocation per `6` WEM fuori capacita originale.
 
 La tabella completa per personaggio e in [`docs/progress_by_character.md`](docs/progress_by_character.md). Le istruzioni di installazione agnostica sono in [`docs/installation.md`](docs/installation.md).
